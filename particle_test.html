@@ -1,0 +1,128 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="stylesheet" type="text/css" href="./css/flaticon.css"> 
+		<script type="text/javascript">var arrayOfFlies= []; </script>
+		<style>
+			::before
+			{
+				font-size: 100px !important;
+			}
+			.element
+			{
+				font-size: 100px;
+				transition: 2s;
+				transition-timing-function: cubic-bezier(0.83, 0.68, 0.17, 0.32); /* Zmienić na ; LUB NIE XD*/
+			}
+			body
+			{
+				overflow: hidden;
+			}
+			#stoned
+			{
+				z-index: -1;
+				position: absolute;
+				/*
+				left: 0px;
+				right: 0px;
+				bottom: 0px;
+				top: 0px;
+				*/
+				
+				left: -200px;
+				top: -200px;
+				right: -200px;
+				bottom: -200px;
+				
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body id="body">
+		<button onclick="createIMG();createIMG();createIMG();"> Stworz </button>
+		<button> sun </button>
+		<div class="flaticon-antibiotic"></div>
+		<div id="stoned"></div>
+		<script type="text/javascript"> 
+			createIMG();
+			createIMG();
+			function createIMG(startX, startY, endX, endY)
+			{
+				var divWidth = document.getElementById("stoned").clientWidth;
+				var divHeight = document.getElementById("stoned").clientHeight;
+				var randStartX;
+				var randStartY;
+				var randEndX;
+				var randEndY;
+				function randomPos()
+				{
+					var mode = Math.floor(Math.random()*20);
+					//choose which to generate first: below 10 start generating x first, above 10 y first
+					if(mode < 10)
+					{
+						randStartX = Math.floor(Math.random()*divWidth);
+						if(randStartX <= 50 || randStartX >= divWidth - 50)
+						{
+							randStartY = Math.floor(Math.random()*divHeight);
+						}
+						else if(randStartX >=50 && randStartX <= divWidth - 50)
+						{
+							do
+							{
+								randStartY = Math.floor(Math.random()*divHeight);
+							}while(randStartY >=50 && randStartY <= divHeight - 50);
+						}
+					}
+					else
+					{
+						randStartY = Math.floor(Math.random()*divHeight);
+						
+						if(randStartY <= 50 || randStartY >= divHeight - 50)
+						{
+							randStartX = Math.floor(Math.random()*divWidth);
+						}
+						else if(randStartY >=50 && randStartY <= divHeight - 50)
+						{
+							do
+							{
+								randStartX = Math.floor(Math.random()*divWidth);
+							}while(randStartX >=50 && randStartX <= divWidth - 50);
+						}
+					}
+					randEndX = divWidth - randStartX;
+					randEndY = divHeight - randStartY;
+					console.log("randomized point "+randStartX+", "+randStartY+ " end "+randEndX+", "+randEndY+ " div dimension "+divWidth+", "+divHeight);
+					//createIMG(randStartX, randStartY, randEndX, randEndY);
+				}
+				randomPos();
+				console.log("randomized point "+randStartX+", "+randStartY+ " end "+randEndX+", "+randEndY+ " div dimension "+divWidth+", "+divHeight);
+				var span = document.createElement("span");
+				span.className = "flaticon-antibiotic element";
+				span.style.position = "absolute";
+				span.style.left = randStartX+"px";
+				span.style.top = randStartY+"px";
+				document.getElementById("stoned").appendChild(span);
+				setTimeout(move, 1);
+				
+				//ARRAY OF CHILD NODES COULD BE USEFUL LATER FOR CREATING RIGHT AMOUNT ON SCREEN
+				//https://css-tricks.com/controlling-css-animations-transitions-javascript/ 
+				//WHOA http://www.eleqtriq.com/wp-content/static/demos/2010/css3d/matrix3dexplorer.html
+				
+				function move()
+				{
+					span.style.left = randEndX+"px";
+					span.style.top = randEndY+"px";
+					span.addEventListener("transitionend", destroy);
+					function destroy(event)//Może być bez event Przetestuj porównanie który event się skończył (naucz się tego cwelu) http://www.w3schools.com/jsref/event_transition_propertyName.asp
+					{
+						var box = document.getElementById("stoned");
+						span.removeEventListener("transitionend", destroy);
+						box.removeChild(span); //LOOSER... BOOOO 
+
+					}
+				}
+			}
+			
+		</script>
+	</body>
+</html>
