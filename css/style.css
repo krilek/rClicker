@@ -4,7 +4,25 @@
 #5a5c51	brązowy
 #ba9077	łosoś
 #bcd5d1	błękit
+
+
+
+What About transition: all?
+You do not have to specify every property that 
+you care about when using a transition. You coul
+d simplify your life by using the all value instead: 
+transition: all .5s ease-in. I do not recommend this because 
+you will take a performance hit. Your browser is now 
+listening for a whole lotta properties as opposed to 
+just a few that you know you will be modifiying. 
+Unless you have a strong need to do this, I would recommend 
+specifying each CSS property you wish to transition individually.
+
 */
+
+
+
+
 body
 {
 	font-family: 'Lato', sans-serif;
@@ -29,16 +47,19 @@ body
 	top: -200px;
 	right: -200px;
 	bottom: -200px;
+	color: black;
 	
 }
 ::before
 {
 	font-size: 100px !important;
+	
 }
 .element
 {
 	transition: 2s;
 	transition-timing-function: cubic-bezier(0.83, 0.68, 0.17, 0.32); /* Zmienić na ; LUB NIE XD*/
+	
 }
 ul#upgrades>li:hover
 {
