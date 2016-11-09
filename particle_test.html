@@ -46,15 +46,77 @@
 		var rainbowOn = false;
 		var particlesOn = false;
 
-		function textGenerator(length){
-			var signArray = "ABCDEFGHIJKLMNOPRSTUVWXYZ"
-			var ret = "";
-			while(ret.length != length)
- 				{var rand = Math.floor(Math.random() * 25);
- 				 				ret += signArray.charAt(rand);}
- 				 				return ret;
-
+		Number.prototype.round = function(miejsc){
+			return +(Math.round(this + "e+" + miejsc) + "e-" + miejsc);
 		}
+
+	
+	    function moveObject(duration){
+	    	var box = document.getElementById("body");
+	    	var startX, startY, endX, endY;
+	    	randomPos(50);
+	    	function randomPos(margin) //Flying particles around screen at random pos
+	        {
+	           
+	            var divWidth = box.clientWidth;
+	            var divHeight = box.clientHeight;
+	            //choose which to generate first: below 10 start generating x first, above 10 y first
+	            var mode = Math.floor(Math.random() * 20);
+	            if (mode < 10) {
+	                startX = Math.floor(Math.random() * divWidth);
+	                if (startX <= margin || startX >= divWidth - margin) {
+	                    startY = Math.floor(Math.random() * divHeight);
+	                } else if (startX >= margin && startX <= divWidth - margin) {
+	                    do {
+	                        startY = Math.floor(Math.random() * divHeight);
+	                    } while (startY >= margin && startY <= divHeight - margin);
+	                }
+	            } else {
+	                startY = Math.floor(Math.random() * divHeight);
+
+	                if (startY <= margin || startY >= divHeight - margin) {
+	                    startX = Math.floor(Math.random() * divWidth);
+	                } else if (startY >= margin && startY <= divHeight - margin) {
+	                    do {
+	                        startX = Math.floor(Math.random() * divWidth);
+	                    } while (startX >= margin && startX <= divWidth - margin);
+	                }
+	            }
+	            endX = divWidth - startX;
+	            endY = divHeight - startY;
+	            console.log("randomized point "+startX+", "+startY+ " end "+endX+", "+endY+ " div dimension "+divWidth+", "+divHeight);
+	        }
+	    	var left = startX;
+	    	var top = startY;
+	    	var amountOfSteps = duration/10;
+	    	var distanceX = Math.abs(endX - left);
+	    	var distanceY = Math.abs(endY - top);
+	    	var stepX = (distanceX/amountOfSteps);
+	    	var stepY = (distanceY/amountOfSteps);
+	    	function frame()
+	    	{
+	    		if(left <= endX)
+	    			left += stepX;
+	    		else
+	    			left -= stepX;
+	    		if(top <= endY)
+	    			top += stepY;
+	    		else
+	    			top -= stepY;
+
+	    		distanceX -= stepX;
+	    		distanceY -= stepY;
+	    		document.getElementById("box").style.left = left+"px";
+	    		document.getElementById("box").style.top = top+"px";
+	    		if(distanceX <= 0 && distanceY <= 0)
+	    		{
+	    			clearInterval(timer);
+	    			moveObject(2000);
+	    		}
+	    	}
+	    	var timer = setInterval(frame, 10);
+	    	console.log(amountOfSteps + " "+ distanceX+" "+distanceY+" "+stepX+" "+stepY);
+	    }	
 
 
 		function colorGenerator() {
@@ -116,70 +178,6 @@
 		        currentlyStoned = false;
 		    }
 
-		}
-
-		function createIMG(image, startX, startY, endX, endY) {
-			var identifier = textGenerator(3);
-		    var box = ID("stoned")
-		    if (startX == null || startY == null || endX == null || endY == null)
-		        randomPos();
-		    var span = document.createElement("span");
-		    span.id = identifier;
-		    span.className = "flaticon-antibiotic element";
-		    span.style.position = "absolute";
-		    span.style.left = startX + "px";
-		    span.style.top = startY + "px";
-		    ID("stoned").appendChild(span);
-		    setTimeout(move, 1);
-
-		    function randomPos() //Flying particles around screen at random pos
-		    {
-		        var divWidth = box.clientWidth;
-		        var divHeight = box.clientHeight;
-		        //choose which to generate first: below 10 start generating x first, above 10 y first
-		        var mode = Math.floor(Math.random() * 20);
-		        if (mode < 10) {
-		            startX = Math.floor(Math.random() * divWidth);
-		            if (startX <= 50 || startX >= divWidth - 50) {
-		                startY = Math.floor(Math.random() * divHeight);
-		            } else if (startX >= 50 && startX <= divWidth - 50) {
-		                do {
-		                    startY = Math.floor(Math.random() * divHeight);
-		                } while (startY >= 50 && startY <= divHeight - 50);
-		            }
-		        } else {
-		            startY = Math.floor(Math.random() * divHeight);
-
-		            if (startY <= 50 || startY >= divHeight - 50) {
-		                startX = Math.floor(Math.random() * divWidth);
-		            } else if (startY >= 50 && startY <= divHeight - 50) {
-		                do {
-		                    startX = Math.floor(Math.random() * divWidth);
-		                } while (startX >= 50 && startX <= divWidth - 50);
-		            }
-		        }
-		        endX = divWidth - startX;
-		        endY = divHeight - startY;
-		        //console.log("randomized point "+randStartX+", "+randStartY+ " end "+randEndX+", "+randEndY+ " div dimension "+divWidth+", "+divHeight);
-		    }
-
-		    function move() {
-		        span.style.left = endX + "px";
-		        span.style.top = endY + "px";
-		        span.addEventListener("transitionend", destroy);
-		        function destroy() {
-		            span.removeEventListener("transitionend", destroy);
-		            arrayOfFlies.push(identifier);
-		            console.log("Chyba Usunięto");
-		            
-		        }
-		    }
-		    console.log("zakończono");
-		}
-		
-		function remove(name)
-		{
-			ID("stoned").removeChild(document.getElementById("name"));
 		}
 
 		</script>

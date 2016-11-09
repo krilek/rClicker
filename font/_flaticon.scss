@@ -1,0 +1,67 @@
+    /*
+    Flaticon icon font: Flaticon
+    Creation date: 09/11/2016 12:55
+    */
+
+    @font-face {
+  font-family: "Flaticon";
+  src: url("./Flaticon.eot");
+  src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
+       url("./Flaticon.woff") format("woff"),
+       url("./Flaticon.ttf") format("truetype"),
+       url("./Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+    .fi:before{
+        display: inline-block;
+  font-family: "Flaticon";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+    }
+
+    .flaticon-2-pills:before { content: "\f100"; }
+.flaticon-antibiotic:before { content: "\f101"; }
+.flaticon-aspirins:before { content: "\f102"; }
+.flaticon-cannabis-leaf:before { content: "\f103"; }
+.flaticon-drug-pills:before { content: "\f104"; }
+.flaticon-drugs:before { content: "\f105"; }
+.flaticon-drugs-1:before { content: "\f106"; }
+.flaticon-holly-xmas-symbol-of-branch-with-leaves-and-fruits:before { content: "\f107"; }
+.flaticon-medicine-pill:before { content: "\f108"; }
+.flaticon-mushroom:before { content: "\f109"; }
+.flaticon-mushrooms:before { content: "\f10a"; }
+.flaticon-plant-on-ground:before { content: "\f10b"; }
+.flaticon-syringe:before { content: "\f10c"; }
+.flaticon-syringe-1:before { content: "\f10d"; }
+    
+    $font-Flaticon-2-pills: "\f100";
+    $font-Flaticon-antibiotic: "\f101";
+    $font-Flaticon-aspirins: "\f102";
+    $font-Flaticon-cannabis-leaf: "\f103";
+    $font-Flaticon-drug-pills: "\f104";
+    $font-Flaticon-drugs: "\f105";
+    $font-Flaticon-drugs-1: "\f106";
+    $font-Flaticon-holly-xmas-symbol-of-branch-with-leaves-and-fruits: "\f107";
+    $font-Flaticon-medicine-pill: "\f108";
+    $font-Flaticon-mushroom: "\f109";
+    $font-Flaticon-mushrooms: "\f10a";
+    $font-Flaticon-plant-on-ground: "\f10b";
+    $font-Flaticon-syringe: "\f10c";
+    $font-Flaticon-syringe-1: "\f10d";

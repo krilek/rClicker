@@ -52,9 +52,10 @@ Faza zmienia boola i przekazuje do kliknięcia czy ma być bonus klikania
 czas fazy zmienia się w zależności od wziętego narkotyku i ilości wziętej w przeszłości
 latające obiekty - pokazuje się gdziekolwiek poza ekranem przelatuje przez przekątną ekranu
 
+Stopniowa zmiana zdjęć wraz z upływem czasu
 
+DODAĆ LOSOWANIE KOLORÓW OBIEKTÓW
 
-WAŻNE KOLOR CZCIONKI WPŁYWA NA LATAJĄCE OBIEKTY
 */
 var clicks = 0;
 var mainAmount = 0,
@@ -465,6 +466,7 @@ function stoned(byWhat, duration)
 {
 	amount =  ID("stoned").childNodes.length
 	ID("body").style.backgroundImage = "radial-gradient(farthest-corner at 50% 250px,"+colorGenerator()+", "+colorGenerator()+", "+colorGenerator()+", "+colorGenerator()+")";
+	if(amount < 20)
 		createIMG("weed");
 	if(duration == 0 || duration <= 0)
 	{

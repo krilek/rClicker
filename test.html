@@ -1,0 +1,354 @@
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <style>
+    body {
+        background-color: #303030;
+    	margin: 0px;
+    }
+    #box{
+    	position: absolute;
+    	width: 50px;
+    	height: 50px;
+    	background-color: green;
+    	overflow: scroll;
+    }
+    </style>
+</head>
+
+<body id="body">
+    <button onclick="moveObject(2000, 2);"> Stworz </button>
+     <script type="text/javascript">
+    /*
+
+    delay co 10ms
+    duration 2s = 2000ms
+
+	    100px*/
+	Number.prototype.round = function(miejsc)
+	{
+		return +(Math.round(this + "e+" + miejsc) + "e-" + miejsc);
+	}
+	function degreeGenerator()
+	{
+		var random = Math.floor(Math.random()*360);
+		random += 'deg';
+		return "rotate("+random+")";
+	}
+	
+    function moveObject(duration, amount){
+
+    	var amountOfSteps = duration/10;
+    	var arrayOfElements = [];
+    	function element(X, Y, eX, eY, rot, col, parent){
+    		this.parentContainer = parent;
+    		this.timer;
+    		this.elToMove;
+    		this.startX = X;
+    		this.startY = Y;
+    		this.endX = eX;
+    		this.endY = eY;
+    		this.rotation = rot;
+    		this.color = col;
+    		this.distanceX = Math.abs(eX - X);
+    		this.distanceY = Math.abs(eY - Y);
+    		this.stepX = this.distanceX/amountOfSteps;
+    		this.stepY = this.distanceY/amountOfSteps;
+    		this.elHandle = function () {
+    			this.elToMove = document.createElement("div");
+    			this.elToMove.style.position = "absolute";
+    			this.elToMove.style.left = this.startX+"px";
+    			this.elToMove.style.top = this.startY+"px";
+    			this.elToMove.style.height = "50px";
+    			this.elToMove.style.width = "50px";
+    			this.elToMove.style.backgroundColor = "red";
+    			this.parentContainer.appendChild(this.elToMove);
+    			var self = this;
+    			this.timer = setInterval(function (){self.frame()}, 10);
+    			//setTimeout(function(){arrayOfElements[1].elHandle()},1000);
+    		}
+    		this.frame = function () {
+    			//console.log(this.elToMove)
+        		if(this.startX <= this.endX)
+    				this.startX += this.stepX;
+	    		else
+	    			this.startX -= this.stepX;
+	    		if(this.startY <= this.endY)
+	    			this.startY += this.stepY;
+	    		else
+	    			this.startY -= this.stepY;
+
+	    		this.distanceX -= this.stepX;
+	    		this.distanceY -= this.stepY;
+	    		this.elToMove.style.left = this.startX+"px";
+	    		this.elToMove.style.top = this.startY+"px";
+	    		this.elToMove.style.transform = degreeGenerator();
+	    		//console.log(this.elToMove);
+	    		if(this.distanceX <= 0 && this.distanceY <= 0)
+	    		{
+	    			clearInterval(this.timer);
+	    			this.parentContainer.removeChild(this.elToMove); 
+	    			delete this;
+	    			/* 
+						CWELU MOŻE UŻYJESZ JAKIEJŚ FLAGI?!
+						KTÓRA ZMUSI KOLEJNY OBIEKT DO WYSKOCZENIA! ALBO PO PROSTU TIMEOUT
+						TIMEOUT JEDNAK COŚ NIE DZIAŁA :/
+
+	    			*/
+	    		}
+    		};
+    	}
+    	var box = document.getElementById("body");
+    	
+    	amount = amount || 1;
+
+    	//console.log(amount);
+    	for(i=0;i<amount;i++){
+    		var positions = randomPos(50);
+    		arrayOfElements.push(new element(positions.startX, positions.startY, positions.endX, positions.endY, 0, "#000000", box))
+    	}
+    	for(i=0;i<amount;i++)
+    	{
+       		var lol = arrayOfElements[i+1];
+       		arrayOfElements[i].elHandle();
+       		setTimeout(function (xd) {
+       			
+       			//console.log(xd);
+       			lol.elHandle();}(lol), 1000);
+    	}
+    	
+    	function randomPos(marg) //Flying particles around screen at random pos
+        {
+            var margin = marg || 1;
+            var startX, startY, endX, endY;
+            var divWidth = box.clientWidth;
+            var divHeight = box.clientHeight;
+            //choose which to generate first: below 10 start generating x first, above 10 y first
+            var mode = Math.floor(Math.random() * 20);
+            if (mode < 10) {
+                startX = Math.floor(Math.random() * divWidth);
+                if (startX <= margin || startX >= divWidth - margin) {
+                    startY = Math.floor(Math.random() * divHeight);
+                } else if (startX >= margin && startX <= divWidth - margin) {
+                    do {
+                        startY = Math.floor(Math.random() * divHeight);
+                    } while (startY >= margin && startY <= divHeight - margin);
+                }
+            } else {
+                startY = Math.floor(Math.random() * divHeight);
+
+                if (startY <= margin || startY >= divHeight - margin) {
+                    startX = Math.floor(Math.random() * divWidth);
+                } else if (startY >= margin && startY <= divHeight - margin) {
+                    do {
+                        startX = Math.floor(Math.random() * divWidth);
+                    } while (startX >= margin && startX <= divWidth - margin);
+                }
+            }
+            endX = divWidth - startX;
+            endY = divHeight - startY;
+            return {
+            	startX: startX,
+            	startY: startY,
+            	endX: endX,
+            	endY: endY
+            };
+        }
+        
+        //console.log(arrayOfElements);
+        /*
+    	var left = startX;
+    	var top = startY;
+    	
+    	var distanceX = Math.abs(endX - left);
+    	var distanceY = Math.abs(endY - top);
+    	var stepX = (distanceX/amountOfSteps);
+    	var stepY = (distanceY/amountOfSteps);
+    	function frame()
+    	{
+    		if(left <= endX)
+    			left += stepX;
+    		else
+    			left -= stepX;
+    		if(top <= endY)
+    			top += stepY;
+    		else
+    			top -= stepY;
+
+    		distanceX -= stepX;
+    		distanceY -= stepY;
+    		document.getElementById("box").style.left = left+"px";
+    		document.getElementById("box").style.top = top+"px";
+    		document.getElementById("box").style.transform = degreeGenerator();
+    		if(distanceX <= 0 && distanceY <= 0)
+    		{
+    			clearInterval(timer);
+    			moveObject(2000);
+    		}
+    	}
+    	var timer = setInterval(frame, 10);
+    	console.log(amountOfSteps + " "+ distanceX+" "+distanceY+" "+stepX+" "+stepY);
+    	*/
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+    var arrayOfFlies = [];
+    var currentlyStoned = false;
+    var rainbowOn = false;
+    var particlesOn = false;
+
+    function textGenerator(length) {
+        var signArray = "ABCDEFGHIJKLMNOPRSTUVWXYZ"
+        var ret = "";
+        while (ret.length != length) {
+            var rand = Math.floor(Math.random() * 25);
+            ret += signArray.charAt(rand);
+        }
+        return ret;
+
+    }
+
+
+    function colorGenerator() {
+        var signArray = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
+        var output = "#";
+        while (output.length != 7) {
+            var rand = Math.floor(Math.random() * 16);
+            output += signArray[rand];
+        }
+        return output;
+    }
+
+    function ID(which) {
+        return document.getElementById(which)
+    }
+
+    function stoned(byWhat, duration) {
+        if (currentlyStoned)
+            return -1;
+        else {
+            currentlyStoned = true;
+
+
+            if (!rainbowOn)
+                rainbow(duration);
+
+            function rainbow(duration) {
+                rainbowOn = true;
+                ID("body").style.backgroundImage = "radial-gradient(farthest-corner at 50% 50%," + colorGenerator() + ", " + colorGenerator() + ", " + colorGenerator() + ", " + colorGenerator() + ")";
+                if (duration == 0 || duration <= 0) {
+                    ID("body").style.backgroundImage = "none";
+                    rainbowOn = false;
+                    console.log("finished!" + duration);
+                    return true;
+                }
+                setTimeout(function() {
+                    rainbow(duration - 100);
+                }, 100);
+            }
+            //console.log("finisheddasdas!"+duration);
+            if (!particlesOn && rainbowOn)
+                generateParticles(duration);
+
+            function generateParticles() {
+                particlesOn = true;
+
+                //ID("stoned").removeChild(ID("stoned").firstChild);
+                if (rainbowOn) {
+                    createIMG("weed")
+                    setTimeout(function() {
+                        arrayOfFlies.forEach(remove);
+                    }, 2000);
+                    setTimeout(generateParticles, 100);
+                } else {
+                    particlesOn = false;
+                    //setTimeout(function (){ID("stoned").innerHTML = "";}, 2000)
+                    return false;
+                }
+            }
+            currentlyStoned = false;
+        }
+
+    }
+
+    function createIMG(image, startX, startY, endX, endY) {
+        var identifier = textGenerator(3);
+        var box = ID("stoned")
+        if (startX == null || startY == null || endX == null || endY == null)
+            randomPos();
+        var span = document.createElement("span");
+        span.id = identifier;
+        span.className = "flaticon-antibiotic element";
+        span.style.position = "absolute";
+        span.style.left = startX + "px";
+        span.style.top = startY + "px";
+        ID("stoned").appendChild(span);
+        setTimeout(move, 1);
+
+        function randomPos() //Flying particles around screen at random pos
+        {
+            var divWidth = box.clientWidth;
+            var divHeight = box.clientHeight;
+            //choose which to generate first: below 10 start generating x first, above 10 y first
+            var mode = Math.floor(Math.random() * 20);
+            if (mode < 10) {
+                startX = Math.floor(Math.random() * divWidth);
+                if (startX <= 50 || startX >= divWidth - 50) {
+                    startY = Math.floor(Math.random() * divHeight);
+                } else if (startX >= 50 && startX <= divWidth - 50) {
+                    do {
+                        startY = Math.floor(Math.random() * divHeight);
+                    } while (startY >= 50 && startY <= divHeight - 50);
+                }
+            } else {
+                startY = Math.floor(Math.random() * divHeight);
+
+                if (startY <= 50 || startY >= divHeight - 50) {
+                    startX = Math.floor(Math.random() * divWidth);
+                } else if (startY >= 50 && startY <= divHeight - 50) {
+                    do {
+                        startX = Math.floor(Math.random() * divWidth);
+                    } while (startX >= 50 && startX <= divWidth - 50);
+                }
+            }
+            endX = divWidth - startX;
+            endY = divHeight - startY;
+            //console.log("randomized point "+randStartX+", "+randStartY+ " end "+randEndX+", "+randEndY+ " div dimension "+divWidth+", "+divHeight);
+        }
+
+        function move() {
+            span.style.left = endX + "px";
+            span.style.top = endY + "px";
+            span.addEventListener("transitionend", destroy);
+
+            function destroy() {
+                span.removeEventListener("transitionend", destroy);
+                arrayOfFlies.push(identifier);
+                console.log("Chyba Usunięto");
+
+            }
+        }
+        console.log("zakończono");
+    }
+
+    function remove(name) {
+        ID("stoned").removeChild(document.getElementById("name"));
+    }
+    */
+    </script>
+</body>
+
+</html>
