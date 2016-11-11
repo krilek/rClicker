@@ -30,7 +30,6 @@ body
 	padding: 0px;
 	background-color: #1d2120;
 	color: #bcd5d1;
-	transition: 3s;
 	overflow: hidden;
 }
 #container
@@ -52,13 +51,7 @@ body
 }
 ::before
 {
-	font-size: 100px !important;
-	
-}
-.element
-{
-	transition: 2s;
-	transition-timing-function: cubic-bezier(0.83, 0.68, 0.17, 0.32); /* Zmienić na ; LUB NIE XD*/
+	font-size: 80px !important;
 	
 }
 ul#upgrades>li:hover
@@ -98,12 +91,6 @@ ul#upgrades>li:hover
 	margin-left:8px;
 	margin-right: 10px;
 	top: -2px;
-}
-.pop
-{
-	font-size: 20px;
-	transition: top 1s;
-	visibility: visible;
 }
 #middle
 {
