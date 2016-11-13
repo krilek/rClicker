@@ -1,4 +1,8 @@
-@import url('https://fonts.googleapis.com/css?family=Lato:400,900&subset=latin-ext'); /*font-family: 'Lato', sans-serif;*/
+@import url('https://fonts.googleapis.com/css?family=Lato:400,900&subset=latin-ext');
+
+/*font-family: 'Lato', sans-serif;*/
+
+
 /*
 #1d2120 ciemny
 #5a5c51	brązowy
@@ -20,114 +24,104 @@ specifying each CSS property you wish to transition individually.
 
 */
 
+body {
+    font-family: 'Lato', sans-serif;
+    margin: 0px;
+    padding: 0px;
+    background-color: #1d2120;
+    color: #bcd5d1;
+    overflow: hidden;
+}
 
+#container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
 
+#stoned {
+    z-index: -1;
+    position: absolute;
+    left: -200px;
+    top: -200px;
+    right: -200px;
+    bottom: -200px;
+    color: black;
+}
 
-body
-{
-	font-family: 'Lato', sans-serif;
-	margin: 0px;
-	padding: 0px;
-	background-color: #1d2120;
-	color: #bcd5d1;
-	overflow: hidden;
+::before {
+    font-size: 80px !important;
 }
-#container
-{
-	position: relative;
-	width: 100%;
-	height:100%;
-}
-#stoned
-{
-	z-index: -1;
-	position: absolute;
-	left: -200px;
-	top: -200px;
-	right: -200px;
-	bottom: -200px;
-	color: black;
-	
-}
-::before
-{
-	font-size: 80px !important;
-	
-}
-ul#upgrades>li:hover
-{
-	color: #ba9077 !important;
-}
-#stats
-{
-	position: absolute;
-	top: 70px;
-	width: auto;
-	z-index: -1;
-	max-width: 50%;
-}
-#mainStat
-{
-	background-color: #5a5c51;
-	border-radius: 25px;
-	position: absolute;
-	top: 10px;
-	left: 10px;
-	width: auto;
-}
-#mainStat>img
-{
-	/*filter: invert(100%);*/
-	height: 54px;
-	margin-left: -5px;
-}
-#mainAmount
-{
-	float:right;
-	width: auto;
-	font-size: 44px;
-	color: #bcd5d1;
-	position:relative;
-	margin-left:8px;
-	margin-right: 10px;
-	top: -2px;
-}
-#middle
-{
 
-	height: 500px;
-	display:flex;
-	justify-content:center;
-	align-items:center;
+ul#upgrades>li:hover {
+    color: #ba9077 !important;
 }
-#mainClick
-{
-	filter: grayscale(100%);
-	height:150px;
-	transition: filter 0.1s
+
+#stats {
+    position: absolute;
+    top: 70px;
+    width: auto;
+    z-index: -1;
+    max-width: 50%;
 }
-#mainClick:hover
-{
-	filter: none;
-	cursor: pointer;
+
+#mainStat {
+    background-color: #5a5c51;
+    border-radius: 25px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: auto;
 }
-#right
-{
-	
-	color: #5a5c51;
-	position: absolute;
-	right: 0px;
-	top: 0px;
-	width: 200px;
-	border: 2px solid #000000;
-	border-top: none;
-	border-right: none;
-	
+
+#mainStat>img {
+    /*filter: invert(100%);*/
+    height: 54px;
+    margin-left: -5px;
 }
-ul>li
-{
-	list-style-type: none;
-	margin-left: -20px;
-	margin-bottom: 8px;
-	cursor: pointer;
+
+#mainAmount {
+    float: right;
+    width: auto;
+    font-size: 44px;
+    color: #bcd5d1;
+    position: relative;
+    margin-left: 8px;
+    margin-right: 10px;
+}
+
+#middle {
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#mainClick {
+    filter: grayscale(100%);
+    height: 150px;
+    transition: filter 0.1s
+}
+
+#mainClick:hover {
+    filter: none;
+    cursor: pointer;
+}
+
+#right {
+    color: #5a5c51;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    width: 200px;
+    border: 2px solid #000000;
+    border-top: none;
+    border-right: none;
+}
+
+ul>li {
+    list-style-type: none;
+    margin-left: -20px;
+    margin-bottom: 8px;
+    cursor: pointer;
 }

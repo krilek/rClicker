@@ -51,6 +51,17 @@ czas fazy zmienia się w zależności od wziętego narkotyku i ilości wziętej 
 
 Stopniowa zmiana zdjęć wraz z upływem czasu
 
+OBIEKTY LATAJACE POWINNY KOŃCZYĆ SIĘ NA RADKU PRZY NIŻSZYM OKNIE
+
+https://msdn.microsoft.com/query/dev12.query?appId=Dev12IDEF1&l=PL-PL&k=k(VS.WebClient.Help.SCRIPT5022)
+RClicker.js (597,17)
+
+
+przesunięcie elementów w dół?
+
+ciemne tło pod napisamim z opacity
+
+
 */
 var clicks = 0;
 var mainAmount = 0,
@@ -135,17 +146,6 @@ var beer = {
         highAmount: 0,
         friendControl: 1.2,
         happinness: 10
-    },
-    ecstasy = {
-        name: 'ecstasy',
-        total: 0,
-        netGain: 4,
-        value: 270,
-        highChance: 20,
-        highDuration: 25,
-        highAmount: 0,
-        friendControl: 3,
-        happinness: 4
     },
     powder = {
         name: 'powder',
@@ -303,26 +303,6 @@ function highCalc(name) {
                 }
                 break;
             }
-        case 'ecstasy':
-            {
-                if (ecstasy.total == 1) {
-                    ecstasy.highAmount++;
-                    stoned(name, ecstasy.highDuration * 1000);
-                    ecstasy.highDuration--;
-                    ecstasy.highChance++;
-                } else if (ecstasy.highDuration == 0) {
-                    break;
-                } else {
-                    if (highHelper(ecstasy.highChance)) {
-                        console.log(highHelper(ecstasy.chance));
-                        ecstasy.highAmount++;
-                        stoned(name, ecstasy.highDuration * 1000);
-                        ecstasy.highDuration--;
-                        ecstasy.highChance++;
-                    }
-                }
-                break;
-            }
         case 'powder':
             {
                 if (powder.total == 1) {
@@ -397,6 +377,7 @@ function main() {
 }
 
 var currentlyWorking = false;
+var playingMusic = false;
 var intervalElements;
 var intervalRainbow;
 
@@ -408,9 +389,17 @@ window.onfocus = function() {
     if (stoned.childNodes.length > 20)
         ID("stoned").innerHTML = "";
 };
-
+var music = new Audio("./snd/narkobaron2.mp3");
 function stoned(byWhat, duration) {
-
+	if(!playingMusic){
+		music.play();
+		music.onpause = function () {
+			if(!playingMusic && currentlyWorking)
+				music.play();
+			else
+				music.pause();
+		}
+	}
     if (!currentlyWorking) {
         currentlyWorking = true;
         intervalElements = setInterval(function() {
@@ -423,6 +412,7 @@ function stoned(byWhat, duration) {
     if (duration == 0 || duration <= 0) {
         highAmount
         currentlyWorking = false;
+        playingMusic = false;
         clearInterval(intervalRainbow);
         clearInterval(intervalElements);
         ID("body").style.backgroundImage = "none";
@@ -461,7 +451,7 @@ function moveObject(duration, amount, what, parent) {
         this.stepY;
         this.outOf = window.onblur;
         this.amountOfFrames = amountOfSteps;
-        var selff = this;
+        var self = this;
 
         this.randomPos = function() {
             var divWidth = this.parentContainer.clientWidth;
@@ -560,7 +550,7 @@ function moveObject(duration, amount, what, parent) {
             this.parentContainer.appendChild(this.elToMove);
 
             this.timer = setInterval(function() {
-                selff.frame()
+                self.frame()
             }, 10);
         }
         this.frame = function() {
@@ -582,13 +572,6 @@ function moveObject(duration, amount, what, parent) {
             if (this.distanceX <= 0 && this.distanceY <= 0) {
                 clearInterval(this.timer);
                 this.parentContainer.removeChild(this.elToMove);
-                //this.elHandle();
-                //delete this;
-                /* 
-						CWELU MOŻE UŻYJESZ JAKIEJŚ FLAGI?!
-						KTÓRA ZMUSI KOLEJNY OBIEKT DO WYSKOCZENIA!
-
-	    			*/
             }
         }
 
@@ -664,14 +647,6 @@ function calculateFriends(whichUpgrade) {
             {
                 friendsGained += molly.friendControl;
                 friends += molly.friendControl;
-                if (Math.abs(friendsLost) > friendsGained)
-                    friendsLost = -1 * friendsGained;
-                break;
-            }
-        case 'ecstasy':
-            {
-                friendsGained += ecstasy.friendControl;
-                friends += ecstasy.friendControl;
                 if (Math.abs(friendsLost) > friendsGained)
                     friendsLost = -1 * friendsGained;
                 break;
@@ -752,11 +727,6 @@ function refreshStat(name) {
                 ID(name + 'Amount').innerHTML = molly.total;
                 break;
             }
-        case 'ecstasy':
-            {
-                ID(name + 'Amount').innerHTML = ecstasy.total;
-                break;
-            }
         case 'powder':
             {
                 ID(name + 'Amount').innerHTML = powder.total;
@@ -806,12 +776,6 @@ function refreshUpgrades() {
         ID("addMolly").style.color = "#bcd5d1";
     else
         ID("addMolly").style.color = "#5a5c51";
-    /*
-    if(mainAmount >= ecstasy.value)
-    	document.getElementById("addEcstasy").style.color = "#bcd5d1";
-    else
-    	document.getElementById("addEcstasy").style.color = "#5a5c51";
-    */
     if (mainAmount >= powder.value)
         ID("addPowder").style.color = "#bcd5d1";
     else
@@ -919,16 +883,6 @@ function addUpgrade(name) {
                 }
                 break;
             }
-        case 'ecstasy':
-            {
-                if (mainAmount >= ecstasy.value) {
-                    mainAmount -= ecstasy.value;
-                    ecstasy.total++;
-                    ecstasy.value *= 1.1
-                    added = true;
-                }
-                break;
-            }
         case 'powder':
             {
                 if (mainAmount >= powder.value) {
@@ -968,7 +922,6 @@ function calculateGain() {
     mainAmount += weed.netGain * weed.total;
     mainAmount += mushroom.netGain * mushroom.total;
     mainAmount += molly.netGain * molly.total;
-    mainAmount += ecstasy.netGain * ecstasy.total;
     mainAmount += powder.netGain * powder.total;
     mainAmount += syringe.netGain * syringe.total;
 }
