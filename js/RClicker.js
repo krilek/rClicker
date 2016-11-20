@@ -56,10 +56,13 @@ OBIEKTY LATAJACE POWINNY KOŃCZYĆ SIĘ NA RADKU PRZY NIŻSZYM OKNIE
 https://msdn.microsoft.com/query/dev12.query?appId=Dev12IDEF1&l=PL-PL&k=k(VS.WebClient.Help.SCRIPT5022)
 RClicker.js (597,17)
 
+naprawić podświetlanie upgrade gdy nie ma odpowiedniej ilości
 
 przesunięcie elementów w dół?
 
 ciemne tło pod napisamim z opacity
+
+Ustawienia, kontrola głośności, wyciszenie, zapis gry, 
 
 
 */
@@ -391,10 +394,18 @@ window.onfocus = function() {
 };
 var music = new Audio("./snd/narkobaron2.mp3");
 function stoned(byWhat, duration) {
+	dur = duration; 
 	if(!playingMusic){
+		playingMusic = true;
 		music.play();
 		music.onpause = function () {
-			if(!playingMusic && currentlyWorking)
+			playingMusic = false;
+			console.log(Math.trunc(music.duration*1000));
+			console.log(dur);
+			console.log(Math.trunc(music.duration*1000) < dur);
+
+			if(!playingMusic && Math.trunc(music.duration*1000) < dur) // http://www.w3schools.com/tags/av_prop_ended.asp zamiast playing music i może wyjebać tego boola
+				//może mieć wyjebane i użyć http://www.w3schools.com/tags/av_prop_loop.asp i wtedy sprawdzać czy długość z aktualnym pozostałym czasem -  wyłączyć loopa
 				music.play();
 			else
 				music.pause();
@@ -426,7 +437,7 @@ function moveObject(duration, amount, what, parent) {
     var arrayOfElements = [];
     amount = amount || 1;
     for (i = 0; i < amount; i++) {
-        arrayOfElements.push(new element(parent, what, colorGenerator(), 50, degreeGenerator(), -50, -200));
+        arrayOfElements.push(new element(parent, what, colorGenerator(), 50, degreeGenerator(), -50, -280));
         arrayOfElements[i].elHandle();
 
     }
@@ -945,4 +956,37 @@ function degreeGenerator() {
     var random = Math.floor(Math.random() * 180);
     random += 'deg';
     return random;
+}
+var expanded = false;
+function expandMenu(image){
+	var menuBox = ID("misc");
+	if(expanded){
+		menuBox.style.marginBottom = "-200px";
+		expanded = false;
+		image.src = "./img/up.png"
+	}else{
+		menuBox.style.marginBottom = "0px";
+		image.src = "./img/down.png"
+		expanded = true;
+	}
+	
+}
+
+
+var muted = false;
+function mute(){
+	muted = !muted;
+	changeVolume(ID("volume").value);
+}
+
+function changeVolume(volumeLevel){
+	if(muted){
+		music.volume = 0;
+		ID("muteBtn").style.backgroundColor = "#5a5c51";
+	}
+	else{
+		ID("muteBtn").style.backgroundColor = "#bcd5d1";
+		music.volume = volumeLevel/100;
+	}
+
 }
