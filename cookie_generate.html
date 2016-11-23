@@ -1,42 +1,110 @@
 <html>
-<body>
-<input type="button" onclick="collectData(var1, var2, var3, var4)">
-<script type="text/javascript">
-	var var1 = "xzsdz";
-	var var2 = "daffgmkv";
-	var var3 = 854;
-	var var4 = true;
-	function collectData(){
-		var output = "";
-		for(i = 0; i<arguments.length; i++){
-			output += String(arguments[i])+"#";
-		}
-		console.log(output);
-		encryptData();
-	}
-	function encryptData(data){
-		var encryptionKey = Math.floor(Math.random()*61)
-		var output = encryptionKey+"#";
-		var alphaNumerical = ["#"];
-		for(i = 48; i < 123; i++){
-			if(i==58) i=65;
-			if(i==91) i=97;
-			alphaNumerical.push(String.fromCharCode(i));
-		}
-		console.log(alphaNumerical);
-		console.log(encryptionKey);
-		for(i=0; i<data.length;i++){
-			output+= 
-		}
-		
-	}
-	function setCookie(cname, cvalue, exdays){
-	    var d = new Date();
-	    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-	    var expires = "expires="+ d.toUTCString();
-	    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-	}
 
-</script>
+<body>
+    <input type="button" onclick="collectData(var1, var2, var3, var4)">
+    <input type="button" onclick="saveGame();" value="cookie">
+    <script type="text/javascript">
+    var var1 = "wzsdz";
+    var var2 = "daffgmkv";
+    var var3 = 854;
+    var var4 = true;
+
+    function saveGame() {
+        data = collectData(var1, var2, var3, var4);
+        encryptedSave = encryptData(data);
+        setCookie('save', encryptedSave, 1);
+    }
+
+    function collectData() {
+        var output = "";
+        for (i = 0; i < arguments.length; i++) {
+            output += String(arguments[i]) + "#";
+        }
+        console.log(output);
+
+        return output;
+    }
+
+    function encryptData(data) {
+        function changeLetter(letter, offset, alphabet) {
+            for (i = 0; i < alphabet.length; i++) {
+                if (letter == alphabet[i]) { //alphaNumerical.length > 
+                    //console.log("KUPA"+i);
+                    if (alphabet.length > i + offset) {
+                        //console.log( letter+" "+i+" Offset: "+offset+" return: "+alphabet[i+offset])
+                        return alphabet[i + offset];
+                    } else {
+                        var temp = (alphabet.length - (i + offset)) * -1;
+                        //console.log(alphabet.length+" "+i+" "+offset+" "+temp);
+
+                        //console.log( letter+" "+i+" Offset: "+offset+" return: "+alphabet[temp])
+                        //console.log(alphabet[temp]);
+                        return alphabet[temp];
+                    }
+                }
+            }
+        }
+        var encryptionKey = Math.floor(Math.random() * 1000) + "";
+        var encryptionOffset = 0;
+        var output = encryptionKey + "#";
+        var alphaNumerical = ["#"];
+        for (i = 0; i < encryptionKey.length; i++) {
+            encryptionOffset += parseInt(encryptionKey.charAt(i));
+        }
+        for (i = 48; i < 123; i++) {
+            if (i == 58) i = 65;
+            if (i == 91) i = 97;
+            alphaNumerical.push(String.fromCharCode(i));
+        }
+        //console.log(alphaNumerical);
+        //console.log(encryptionKey);
+        //console.log(encryptionOffset);
+        //console.log(data.length);
+
+        for (j = 0; j < data.length; j++) {
+            //console.log(data.length);
+            //console.log(data.charAt(j));
+            output += changeLetter(data.charAt(j), encryptionOffset, alphaNumerical);
+        }
+        console.log(output);
+        return output;
+
+    }
+
+    function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        var expires = "expires=" + d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    function getCookie(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+    function checkCookie() {
+        var user = getCookie("save");
+        if (user != "") {
+            alert("Welcome again " + user);
+        } else {
+            user = prompt("Please enter your name:", "");
+            if (user != "" && user != null) {
+                setCookie("username", user, 3);
+            }
+        }
+    }
+    </script>
 </body>
+
 </html>
