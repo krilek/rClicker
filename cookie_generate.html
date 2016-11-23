@@ -1,0 +1,42 @@
+<html>
+<body>
+<input type="button" onclick="collectData(var1, var2, var3, var4)">
+<script type="text/javascript">
+	var var1 = "xzsdz";
+	var var2 = "daffgmkv";
+	var var3 = 854;
+	var var4 = true;
+	function collectData(){
+		var output = "";
+		for(i = 0; i<arguments.length; i++){
+			output += String(arguments[i])+"#";
+		}
+		console.log(output);
+		encryptData();
+	}
+	function encryptData(data){
+		var encryptionKey = Math.floor(Math.random()*61)
+		var output = encryptionKey+"#";
+		var alphaNumerical = ["#"];
+		for(i = 48; i < 123; i++){
+			if(i==58) i=65;
+			if(i==91) i=97;
+			alphaNumerical.push(String.fromCharCode(i));
+		}
+		console.log(alphaNumerical);
+		console.log(encryptionKey);
+		for(i=0; i<data.length;i++){
+			output+= 
+		}
+		
+	}
+	function setCookie(cname, cvalue, exdays){
+	    var d = new Date();
+	    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+	    var expires = "expires="+ d.toUTCString();
+	    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+	}
+
+</script>
+</body>
+</html>

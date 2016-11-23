@@ -64,7 +64,7 @@ ciemne tło pod napisamim z opacity
 
 Ustawienia, kontrola głośności, wyciszenie, zapis gry, 
 
-
+zrobić w js pozycjonowanie radka kurwa mać jebany w pizde css bez zmiennych
 */
 var clicks = 0;
 var mainAmount = 0,
