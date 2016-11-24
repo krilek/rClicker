@@ -38,7 +38,7 @@ Funkcja sprawdzająca przeglądarkę
        alert('unknown');
     }
     }
-	
+    
 zapożyczanie się u kolegów?, banner oceniający stanowisko wobec kolegów
 ustawić atrybut np klase i ją kontrolować hoverem
 humor radka
@@ -65,6 +65,12 @@ ciemne tło pod napisamim z opacity
 Ustawienia, kontrola głośności, wyciszenie, zapis gry, 
 
 zrobić w js pozycjonowanie radka kurwa mać jebany w pizde css bez zmiennych
+
+
+    ZAOKRĄGLIĆ WSZYSTKIE LICZBY!!!
+    Napisać auto load przy załadowaniu
+    Zrobić zapytanie czy nadpisać zapis(sprawdzenie ilości kliknięć !)
+
 */
 var clicks = 0;
 var mainAmount = 0,
@@ -163,12 +169,12 @@ var beer = {
     },
     syringe = {
         name: 'syringe',
-        total: 0,
+        total: 0,//
         netGain: 12,
-        value: 500,
-        highChance: 20,
-        highDuration: 33,
-        highAmount: 0,
+        value: 500,//
+        highChance: 20,//
+        highDuration: 33,//
+        highAmount: 0,//
         friendControl: -5,
         happinness: 1
     };
@@ -353,7 +359,6 @@ function highCalc(name) {
 
 
 function main() {
-
     if (beer.total == 1)
         ID("addBeer").innerHTML = "Wypij kolejne piwo";
     if (salvia.total == 1)
@@ -393,24 +398,25 @@ window.onfocus = function() {
         ID("stoned").innerHTML = "";
 };
 var music = new Audio("./snd/narkobaron2.mp3");
-function stoned(byWhat, duration) {
-	dur = duration; 
-	if(!playingMusic){
-		playingMusic = true;
-		music.play();
-		music.onpause = function () {
-			playingMusic = false;
-			console.log(Math.trunc(music.duration*1000));
-			console.log(dur);
-			console.log(Math.trunc(music.duration*1000) < dur);
 
-			if(!playingMusic && Math.trunc(music.duration*1000) < dur) // http://www.w3schools.com/tags/av_prop_ended.asp zamiast playing music i może wyjebać tego boola
-				//może mieć wyjebane i użyć http://www.w3schools.com/tags/av_prop_loop.asp i wtedy sprawdzać czy długość z aktualnym pozostałym czasem -  wyłączyć loopa
-				music.play();
-			else
-				music.pause();
-		}
-	}
+function stoned(byWhat, duration) {
+    dur = duration;
+    if (!playingMusic) {
+        playingMusic = true;
+        music.play();
+        music.onpause = function() {
+            playingMusic = false;
+            console.log(Math.trunc(music.duration * 1000));
+            console.log(dur);
+            console.log(Math.trunc(music.duration * 1000) < dur);
+
+            if (!playingMusic && Math.trunc(music.duration * 1000) < dur) // http://www.w3schools.com/tags/av_prop_ended.asp zamiast playing music i może wyjebać tego boola
+            //może mieć wyjebane i użyć http://www.w3schools.com/tags/av_prop_loop.asp i wtedy sprawdzać czy długość z aktualnym pozostałym czasem -  wyłączyć loopa
+                music.play();
+            else
+                music.pause();
+        }
+    }
     if (!currentlyWorking) {
         currentlyWorking = true;
         intervalElements = setInterval(function() {
@@ -958,35 +964,135 @@ function degreeGenerator() {
     return random;
 }
 var expanded = false;
-function expandMenu(image){
-	var menuBox = ID("misc");
-	if(expanded){
-		menuBox.style.marginBottom = "-200px";
-		expanded = false;
-		image.src = "./img/up.png"
-	}else{
-		menuBox.style.marginBottom = "0px";
-		image.src = "./img/down.png"
-		expanded = true;
-	}
-	
+
+function expandMenu(image) {
+    var menuBox = ID("misc");
+    if (expanded) {
+        menuBox.style.marginBottom = "-200px";
+        expanded = false;
+        image.src = "./img/up.png"
+    } else {
+        menuBox.style.marginBottom = "0px";
+        image.src = "./img/down.png"
+        expanded = true;
+    }
+
 }
 
 
 var muted = false;
-function mute(){
-	muted = !muted;
-	changeVolume(ID("volume").value);
+
+function mute() {
+    muted = !muted;
+    changeVolume(ID("volume").value);
 }
 
-function changeVolume(volumeLevel){
-	if(muted){
-		music.volume = 0;
-		ID("muteBtn").style.backgroundColor = "#5a5c51";
-	}
-	else{
-		ID("muteBtn").style.backgroundColor = "#bcd5d1";
-		music.volume = volumeLevel/100;
-	}
+function changeVolume(volumeLevel) {
+    if (muted) {
+        music.volume = 0;
+        ID("muteBtn").style.backgroundColor = "#5a5c51";
+    } else {
+        ID("muteBtn").style.backgroundColor = "#bcd5d1";
+        music.volume = volumeLevel / 100;
+    }
 
+}
+
+
+function saveGame() {
+    function collectData() {
+        var output = "";
+        for (i = 0; i < arguments.length; i++) {
+            output += String(arguments[i]) + "#";
+        }
+        return output;
+    }
+
+    function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        var expires = "expires=" + d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+    data = collectData(clicks, mainAmount, friends, friendsGained, friendsLost, 
+        beer.total, beer.value, beer.highChance, beer.highDuration, beer.highAmount);
+
+
+    encryptedSave = encryptionMechanism("encrypt", data);
+    setCookie('save', encryptedSave, 1);
+    loadGame();
+}
+
+function loadGame() {
+    function getCookieValue() {
+        var cookie = document.cookie;
+        for (i = 0; i < cookie.length; i++) {
+            if (cookie.charAt(i) == "=")
+                return cookie.substr(i + 1);
+        }
+    }
+    var savedGame = getCookieValue();
+    var decryptedSave = encryptionMechanism("decrypt", savedGame);
+}
+
+
+
+function encryptionMechanism(mode, data) {
+    console.log(mode + " " + data);
+    var output = "";
+    var dataStart = 0;
+    var key = "";
+    var offset = 0;
+    if (mode == "encrypt") {
+        //Creation of key used later in encryption
+        key += Math.floor(Math.random() * 1000);
+        output = key + "#";
+
+    } else if (mode == "decrypt") {
+
+        //Getting key from encrypted data
+        for (m = 0; m < 4; m++) {
+            if (data.charAt(m) == "#") {
+                dataStart = m + 1;
+                break;
+            } else {
+                key += data.charAt(m);
+            }
+        }
+    } else {
+        return "";
+    }
+    //Offset calculation
+    for (i = 0; i < key.length; i++) {
+        offset += parseInt(key.charAt(i));
+    }
+    if (mode == "decrypt") {
+        offset *= -1;
+    }
+    //Initialization of array with signs
+    var charArray = ["#", ".", "-"];
+    for (i = 48; i < 123; i++) {
+        if (i == 58) i = 65;
+        if (i == 91) i = 97;
+        charArray.push(String.fromCharCode(i));
+    }
+    //Main loop going through all letters in 'data' string
+    for (j = dataStart; j < data.length; j++) {
+        output += changeLetter(data.charAt(j), offset, charArray);
+    }
+    console.log(output);
+    return output;
+
+    function changeLetter(letter, offset, signs) {
+        for (i = 0; i < signs.length; i++) {
+            if (letter == signs[i]) {
+                if (signs.length > i + offset && 0 <= i + offset) {
+                    return signs[i + offset];
+                } else {
+                    var temp = Math.abs(signs.length - Math.abs(i + offset));
+                    return signs[temp];
+                }
+            }
+        }
+    }
 }
