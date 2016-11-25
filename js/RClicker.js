@@ -77,9 +77,12 @@ var mainAmount = 0,
     friendsGained = 0,
     friendsLost = 0,
     friends = 0;
+var upgradeArray = [];
 
 var beer = {
         name: 'beer',
+        upgradeID: 'addBeer',
+        upgradeText: 'Wypij kolejne piwo',
         total: 0,
         netGain: 0.1,
         value: 25,
@@ -91,6 +94,8 @@ var beer = {
     },
     salvia = {
         name: 'salvia',
+        upgradeID: 'addSalvia',
+        upgradeText: 'Zapal szałwię',
         total: 0,
         netGain: 0.3,
         value: 50,
@@ -103,6 +108,8 @@ var beer = {
     },
     acodin = {
         name: 'acodin',
+        upgradeID: 'addAcodin',
+        upgradeText: 'Weź acodin',
         total: 0,
         netGain: 0.2,
         value: 100,
@@ -114,6 +121,8 @@ var beer = {
     },
     weed = {
         name: 'weed',
+        upgradeID: 'addWeed',
+        upgradeText: 'Spal blanta',
         total: 0,
         netGain: 1,
         value: 125,
@@ -125,6 +134,8 @@ var beer = {
     },
     booster = {
         name: 'booster',
+        upgradeID: 'addBooster',
+        upgradeText: 'Zgrzej kosiora',
         total: 0,
         netGain: 1.1,
         value: 150,
@@ -136,6 +147,8 @@ var beer = {
     },
     mushroom = {
         name: 'mushroom',
+        upgradeID: 'addMushroom',
+        upgradeText: 'Zasmakuj grzybka',
         total: 0,
         netGain: 1.5,
         value: 200,
@@ -147,6 +160,8 @@ var beer = {
     },
     molly = {
         name: 'molly',
+        upgradeID: 'addMolly',
+        upgradeText: 'Weź LSD',
         total: 0,
         netGain: 1.7,
         value: 220,
@@ -158,6 +173,8 @@ var beer = {
     },
     powder = {
         name: 'powder',
+        upgradeID: 'addPowder',
+        upgradeText: 'Wciągnij kreskę',
         total: 0,
         netGain: 5,
         value: 360,
@@ -169,12 +186,14 @@ var beer = {
     },
     syringe = {
         name: 'syringe',
-        total: 0,//
+        upgradeID: 'addSyringe',
+        upgradeText: 'Daj w żyłę',
+        total: 0,
         netGain: 12,
-        value: 500,//
-        highChance: 20,//
-        highDuration: 33,//
-        highAmount: 0,//
+        value: 500,
+        highChance: 20,
+        highDuration: 33,
+        highAmount: 0,
         friendControl: -5,
         happinness: 1
     };
@@ -186,197 +205,29 @@ function highHelper(chance) {
 }
 
 
-function highCalc(name) {
-    switch (name) {
-        case 'salvia':
-            {
-
-
-                if (salvia.total == 1) {
-                    salvia.highAmount++;
-                    stoned(name, salvia.highDuration * 1000);
-                    salvia.highDuration--;
-                    salvia.highChance++;
-                } else if (salvia.highDuration == 0) {
-                    break;
-                } else {
-                    if (highHelper(salvia.highChance)) {
-                        console.log(highHelper(salvia.chance));
-                        salvia.highAmount++;
-                        stoned(name, salvia.highDuration * 1000);
-                        salvia.highDuration--;
-                        salvia.highChance++;
-                    }
-                }
-                break;
-            }
-        case 'acodin':
-            {
-
-                if (acodin.total == 1) {
-                    acodin.highAmount++;
-                    stoned(name, acodin.highDuration * 1000);
-                    acodin.highDuration--;
-                    acodin.highChance++;
-                } else if (acodin.highDuration == 0) {
-                    break;
-                } else {
-                    if (highHelper(acodin.highChance)) {
-                        console.log(highHelper(acodin.chance));
-                        acodin.highAmount++;
-                        stoned(name, acodin.highDuration * 1000);
-                        acodin.highDuration--;
-                        acodin.highChance++;
-                    }
-                }
-                break;
-            }
-        case 'booster':
-            {
-
-                if (booster.total == 1) {
-                    booster.highAmount++;
-                    stoned(name, booster.highDuration * 1000);
-                    booster.highDuration--;
-                    booster.highChance++;
-                } else if (booster.highDuration == 0) {
-                    break;
-                } else {
-                    if (highHelper(booster.highChance)) {
-                        console.log(highHelper(booster.chance));
-                        booster.highAmount++;
-                        stoned(name, booster.highDuration * 1000);
-                        booster.highDuration--;
-                        booster.highChance++;
-                    }
-                }
-                break;
-            }
-        case 'weed':
-            {
-                if (weed.total == 1) {
-                    weed.highAmount++;
-                    stoned(name, weed.highDuration * 1000);
-                    weed.highDuration--;
-                    weed.highChance++;
-                } else if (weed.highDuration == 0) {
-                    break;
-                } else {
-                    if (highHelper(weed.highChance)) {
-                        console.log(highHelper(weed.chance));
-                        weed.highAmount++;
-                        stoned(name, weed.highDuration * 1000);
-                        weed.highDuration--;
-                        weed.highChance++;
-                    }
-                }
-                break;
-            }
-        case 'mushroom':
-            {
-                if (mushroom.total == 1) {
-                    mushroom.highAmount++;
-                    stoned(name, mushroom.highDuration * 1000);
-                    mushroom.highDuration--;
-                    mushroom.highChance++;
-                } else if (mushroom.highDuration == 0) {
-                    break;
-                } else {
-                    if (highHelper(mushroom.highChance)) {
-                        console.log(highHelper(mushroom.chance));
-                        mushroom.highAmount++;
-                        stoned(name, mushroom.highDuration * 1000);
-                        mushroom.highDuration--;
-                        mushroom.highChance++;
-                    }
-                }
-                break;
-            }
-        case 'molly':
-            {
-                if (molly.total == 1) {
-                    molly.highAmount++;
-                    stoned(name, molly.highDuration * 1000);
-                    molly.highDuration--;
-                    molly.highChance++;
-                } else if (molly.highDuration == 0) {
-                    break;
-                } else {
-                    if (highHelper(molly.highChance)) {
-                        console.log(highHelper(molly.chance));
-                        molly.highAmount++;
-                        stoned(name, molly.highDuration * 1000);
-                        molly.highDuration--;
-                        molly.highChance++;
-                    }
-                }
-                break;
-            }
-        case 'powder':
-            {
-                if (powder.total == 1) {
-                    powder.highAmount++;
-                    stoned(name, powder.highDuration * 1000);
-                    powder.highDuration--;
-                    powder.highChance++;
-                } else if (powder.highDuration == 0) {
-                    break;
-                } else {
-                    if (highHelper(powder.highChance)) {
-                        console.log(highHelper(powder.chance));
-                        powder.highAmount++;
-                        stoned(name, powder.highDuration * 1000);
-                        powder.highDuration--;
-                        powder.highChance++;
-                    }
-                }
-                break;
-            }
-        case 'syringe':
-            {
-                if (syringe.total == 1) {
-                    syringe.highAmount++;
-                    stoned(name, syringe.highDuration * 1000);
-                    syringe.highDuration--;
-                    syringe.highChance++;
-                } else if (syringe.highDuration == 0) {
-                    break;
-                } else {
-                    if (highHelper(syringe.highChance)) {
-                        console.log(highHelper(syringe.chance));
-                        syringe.highAmount++;
-                        stoned(name, syringe.highDuration * 1000);
-                        syringe.highDuration--;
-                        syringe.highChance++;
-                    }
-                }
-                break;
-            }
-
+function highCalc(upgrade) {
+    if (upgrade.total == 1) {
+        upgrade.highAmount++;
+        stoned(upgrade.name, upgrade.highDuration * 1000);
+        upgrade.highDuration--;
+        upgrade.highChance++;
+    } else if (upgrade.highDuration == 0) {
+        //break;
+    } else {
+        if (highHelper(upgrade.highChance)) {
+            console.log(highHelper(upgrade.chance));
+            upgrade.highAmount++;
+            stoned(upgrade.name, upgrade.highDuration * 1000);
+            upgrade.highDuration--;
+            upgrade.highChance++;
+        }
     }
     ID("highAmount").innerHTML = salvia.highAmount + acodin.highAmount + booster.highAmount + weed.highAmount + mushroom.highAmount + molly.highAmount + powder.highAmount + syringe.highAmount;
 }
 
 
 function main() {
-    if (beer.total == 1)
-        ID("addBeer").innerHTML = "Wypij kolejne piwo";
-    if (salvia.total == 1)
-        ID("addSalvia").innerHTML = "Zapal szałwię";
-    if (acodin.total == 1)
-        ID("addAcodin").innerHTML = "Weź acodin";
-    if (booster.total == 1)
-        ID("addBooster").innerHTML = "Zgrzej kosiora";
-    if (weed.total == 1)
-        ID("addWeed").innerHTML = "Spal blanta";
-    if (mushroom.total == 1)
-        ID("addMushroom").innerHTML = "Zasmakuj grzybka";
-    if (molly.total == 1)
-        ID("addMolly").innerHTML = "Weź LSD";
-    if (powder.total == 1)
-        ID("addPowder").innerHTML = "Wciągnij kreskę";
-    if (syringe.total == 1)
-        ID("addSyringe").innerHTML = "Daj w żyłę";
+
     //console.log(salvia.highDuration);
     calculateGain();
     refreshMainAmount();
@@ -596,6 +447,20 @@ function moveObject(duration, amount, what, parent) {
 
 }
 
+function init(){
+    upgradeArray.push(beer);
+    upgradeArray.push(salvia );
+    upgradeArray.push(acodin);
+    upgradeArray.push(weed);
+    upgradeArray.push(booster);
+    upgradeArray.push(mushroom);
+    upgradeArray.push(molly);
+    upgradeArray.push(powder);
+    upgradeArray.push(syringe);
+    main();
+}
+
+
 function cheat() {
     mainAmount = 99999;
     refreshMainAmount();
@@ -611,88 +476,24 @@ function refreshMainAmount() {
 }
 
 function calculateFriends(whichUpgrade) {
-    switch (whichUpgrade) {
-        case 'beer':
-            {
-                friendsGained += beer.friendControl;
-                friends += beer.friendControl;
-                if (Math.abs(friendsLost) > friendsGained)
-                    friendsLost = -1 * friendsGained;
-                break;
-            }
-        case 'salvia':
-            {
-                friendsLost += salvia.friendControl;
-                friends += salvia.friendControl;
-                if (Math.abs(friendsLost) > friendsGained)
-                    friendsLost = -1 * friendsGained;
-                break;
-            }
-        case 'acodin':
-            {
-                friendsLost += acodin.friendControl;
-                friends += acodin.friendControl;
-                if (Math.abs(friendsLost) > friendsGained)
-                    friendsLost = -1 * friendsGained;
-                break;
-            }
-        case 'booster':
-            {
-                friendsLost += booster.friendControl;
-                friends += booster.friendControl;
-                if (Math.abs(friendsLost) > friendsGained)
-                    friendsLost = -1 * friendsGained;
-                break;
-            }
-        case 'weed':
-            {
-                friendsGained += weed.friendControl;
-                friends += weed.friendControl;
-                if (Math.abs(friendsLost) > friendsGained)
-                    friendsLost = -1 * friendsGained;
-                break;
-            }
-        case 'mushroom':
-            {
-                friendsGained += mushroom.friendControl;
-                friends += mushroom.friendControl;
-                if (Math.abs(friendsLost) > friendsGained)
-                    friendsLost = -1 * friendsGained;
-                break;
-            }
-        case 'molly':
-            {
-                friendsGained += molly.friendControl;
-                friends += molly.friendControl;
-                if (Math.abs(friendsLost) > friendsGained)
-                    friendsLost = -1 * friendsGained;
-                break;
-            }
-        case 'powder':
-            {
-                friendsGained += powder.friendControl;
-                friends += powder.friendControl;
-                if (Math.abs(friendsLost) > friendsGained)
-                    friendsLost = -1 * friendsGained;
-                break;
-            }
-        case 'syringe':
-            {
-                friendsLost += syringe.friendControl;
-                friends += syringe.friendControl;
-                if (Math.abs(friendsLost) > friendsGained)
-                    friendsLost = -1 * friendsGained;
-                break;
-            }
-
+    if(whichUpgrade.friendControl > 0 ){
+        friendsGained += whichUpgrade.friendControl;
+        friends += whichUpgrade.friendControl;
     }
-    document.getElementById("friendsGained").innerHTML = Math.floor(friendsGained);
-    document.getElementById("friendsLost").innerHTML = Math.floor(Math.abs(friendsLost));
+    else{
+        friendsLost += whichUpgrade.friendControl;
+        if (Math.abs(friendsLost) > friendsGained)
+            friendsLost = -1 * friendsGained;
+        friends += whichUpgrade.friendControl;
+    }
+
+    ID("friendsGained").innerHTML = Math.round(friendsGained);
+    ID("friendsLost").innerHTML = Math.round(Math.abs(friendsLost));
 
     if (friends < 0) {
         friends = 0;
     }
-    document.getElementById("friends").innerHTML = Math.floor(friends);
+    ID("friends").innerHTML = Math.round(friends);
 
 }
 
@@ -707,240 +508,51 @@ function colorGenerator() {
 }
 
 
-function refreshStat(name) {
-    switch (name) {
-        case 'beer':
-            {
-                ID(name + 'Amount').innerHTML = beer.total;
-                break;
-            }
-        case 'salvia':
-            {
-                ID(name + 'Amount').innerHTML = salvia.total;
-                break;
-            }
-        case 'acodin':
-            {
-                ID(name + 'Amount').innerHTML = acodin.total;
-                break;
-            }
-        case 'booster':
-            {
-                ID(name + 'Amount').innerHTML = booster.total;
-                break;
-            }
-        case 'weed':
-            {
-                ID(name + 'Amount').innerHTML = weed.total;
-                break;
-            }
-        case 'mushroom':
-            {
-                ID(name + 'Amount').innerHTML = mushroom.total;
-                break;
-            }
-        case 'molly':
-            {
-                ID(name + 'Amount').innerHTML = molly.total;
-                break;
-            }
-        case 'powder':
-            {
-                ID(name + 'Amount').innerHTML = powder.total;
-                break;
-            }
-        case 'syringe':
-            {
-                ID(name + 'Amount').innerHTML = syringe.total;
-                break;
-            }
-
-    }
+function refreshStat(upgrade) {
+    ID(upgrade.name + 'Amount').innerHTML = upgrade.total;
 }
 
 function refreshUpgrades() {
-    if (mainAmount >= beer.value)
-        ID("addBeer").style.color = "#bcd5d1";
-    else
-        ID("addBeer").style.color = "#5a5c51";
+    for(i=0;i<upgradeArray.length;i++){
+        //console.log(upgradeArray[i]);
+        if(mainAmount >= upgradeArray[i].value) 
+            ID(upgradeArray[i].upgradeID).style.color = "#bcd5d1";
+        else
+            ID(upgradeArray[i].upgradeID).style.color = "#5a5c51";
+    }
 
-    if (mainAmount >= salvia.value)
-        ID("addSalvia").style.color = "#bcd5d1";
-    else
-        ID("addSalvia").style.color = "#5a5c51";
-
-    if (mainAmount >= acodin.value)
-        ID("addAcodin").style.color = "#bcd5d1";
-    else
-        ID("addAcodin").style.color = "#5a5c51";
-
-    if (mainAmount >= booster.value)
-        ID("addBooster").style.color = "#bcd5d1";
-    else
-        ID("addBooster").style.color = "#5a5c51";
-
-    if (mainAmount >= weed.value)
-        ID("addWeed").style.color = "#bcd5d1";
-    else
-        ID("addWeed").style.color = "#5a5c51";
-
-    if (mainAmount >= mushroom.value)
-        ID("addMushroom").style.color = "#bcd5d1";
-    else
-        ID("addMushroom").style.color = "#5a5c51";
-
-    if (mainAmount >= molly.value)
-        ID("addMolly").style.color = "#bcd5d1";
-    else
-        ID("addMolly").style.color = "#5a5c51";
-    if (mainAmount >= powder.value)
-        ID("addPowder").style.color = "#bcd5d1";
-    else
-        ID("addPowder").style.color = "#5a5c51";
-
-    if (mainAmount >= syringe.value)
-        ID("addSyringe").style.color = "#bcd5d1";
-    else
-        ID("addSyringe").style.color = "#5a5c51";
-
-
-    if (beer.total == 1)
-        ID("addBeer").innerHTML = "Wypij kolejne piwo";
-    if (salvia.total == 1)
-        ID("addSalvia").innerHTML = "Zapal szałwię";
-    if (acodin.total == 1)
-        ID("addAcodin").innerHTML = "Weź acodin";
-    if (booster.total == 1)
-        ID("addBooster").innerHTML = "Zgrzej kosiora";
-    if (weed.total == 1)
-        ID("addWeed").innerHTML = "Spal blanta";
-    if (mushroom.total == 1)
-        ID("addMushroom").innerHTML = "Zasmakuj grzybka";
-    if (molly.total == 1)
-        ID("addMolly").innerHTML = "Weź LSD";
-    if (powder.total == 1)
-        ID("addPowder").innerHTML = "Wciągnij kreskę";
-    if (syringe.total == 1)
-        ID("addSyringe").innerHTML = "Daj w żyłę";
-
+    for(i=0;i<upgradeArray.length;i++){
+        //console.log(upgradeArray[i]);
+        if(upgradeArray[i].total == 1) ID(upgradeArray[i].upgradeID).innerHTML = upgradeArray[i].upgradeText;
+    }
 
 
 }
 
-function addUpgrade(name) {
-    var added = false;
-    switch (name) {
-        case 'beer':
-            {
-                if (mainAmount >= beer.value) {
-                    mainAmount -= beer.value;
-                    beer.total++;
-                    beer.value *= 1.1
-                    added = true;
-                }
-                break;
-            }
-        case 'salvia':
-            {
-                if (mainAmount >= salvia.value) {
-                    mainAmount -= salvia.value;
-                    salvia.total++;
-                    salvia.value *= 1.1
-                    added = true;
-                }
-                break;
-            }
-        case 'acodin':
-            {
-                if (mainAmount >= acodin.value) {
-                    mainAmount -= acodin.value;
-                    acodin.total++;
-                    acodin.value *= 1.1
-                    added = true;
-                }
-                break;
-            }
-        case 'booster':
-            {
-                if (mainAmount >= booster.value) {
-                    mainAmount -= booster.value;
-                    booster.total++;
-                    booster.value *= 1.1
-                    added = true;
-                }
-                break;
-            }
-        case 'weed':
-            {
-                if (mainAmount >= weed.value) {
-                    mainAmount -= weed.value;
-                    weed.total++;
-                    weed.value *= 1.1
-                    added = true;
-                }
-                break;
-            }
-        case 'mushroom':
-            {
-                if (mainAmount >= mushroom.value) {
-                    mainAmount -= mushroom.value;
-                    mushroom.total++;
-                    mushroom.value *= 1.1
-                    added = true;
-                }
-                break;
-            }
-        case 'molly':
-            {
-                if (mainAmount >= molly.value) {
-                    mainAmount -= molly.value;
-                    molly.total++;
-                    molly.value *= 1.1
-                    added = true;
-                }
-                break;
-            }
-        case 'powder':
-            {
-                if (mainAmount >= powder.value) {
-                    mainAmount -= powder.value;
-                    powder.total++;
-                    powder.value *= 1.1
-                    added = true;
-                }
-                break;
-            }
-        case 'syringe':
-            {
-                if (mainAmount >= syringe.value) {
-                    mainAmount -= syringe.value;
-                    syringe.total++;
-                    syringe.value *= 1.1
-                    added = true;
-                }
-                break;
-            }
-
+function addUpgrade(upgrade) {
+    function upgradeManip(upgrade){
+        if (mainAmount >= upgrade.value) {
+            mainAmount -= upgrade.value;
+            upgrade.total++;
+            upgrade.value = Math.round( upgrade.value * 1.1);
+            return true;
+        }
+        else return false;
     }
+    var added = false;
+    added = upgradeManip(upgrade);
     if (added) {
         refreshMainAmount();
-        refreshStat(name);
+        refreshStat(upgrade);
         refreshUpgrades();
-        calculateFriends(name);
-        highCalc(name);
+        calculateFriends(upgrade);
+        highCalc(upgrade);
     }
 }
 
 function calculateGain() {
-    mainAmount += beer.netGain * beer.total;
-    mainAmount += salvia.netGain * salvia.total;
-    mainAmount += acodin.netGain * acodin.total;
-    mainAmount += booster.netGain * booster.total;
-    mainAmount += weed.netGain * weed.total;
-    mainAmount += mushroom.netGain * mushroom.total;
-    mainAmount += molly.netGain * molly.total;
-    mainAmount += powder.netGain * powder.total;
-    mainAmount += syringe.netGain * syringe.total;
+    for(i=0;i<upgradeArray.length;i++)
+        mainAmount += upgradeArray[i].netGain * upgradeArray[i].total;
 }
 
 
