@@ -82,6 +82,8 @@ var upgradeArray = [];
 var clickPosition = {
     x: 0,
     y: 0,
+    xMid: 0,
+    yMid: 0
 };
 
 var beer = {
@@ -246,7 +248,7 @@ var intervalElements;
 var intervalRainbow;
 
 function rainbow() {
-    ID("body").style.backgroundImage = "radial-gradient(farthest-corner at 50% 250px," + colorGenerator() + ", " + colorGenerator() + ", " + colorGenerator() + ", " + colorGenerator() + ")";
+    ID("body").style.backgroundImage = "radial-gradient(farthest-corner at "+clickPosition.xMid+"px "+clickPosition.yMid+"px," + colorGenerator() + ", " + colorGenerator() + ", " + colorGenerator() + ", " + colorGenerator() + ")";
 }
 var outOfWindow;
 window.onblur = function() {
@@ -256,19 +258,16 @@ window.onfocus = function() {
     outOfWindow = false;
 
 };
-//var music = new Audio("./snd/narkobaron2.mp3");
-var music = new Audio("");
+var music = new Audio("./snd/narkobaron2.mp3");
+//var music = new Audio("");
 function stoned(byWhat, duration) {
+    var mask = ID("stonedMask");
     dur = duration;
     if (!playingMusic) {
         playingMusic = true;
         music.play();
         music.onpause = function() {
             playingMusic = false;
-            console.log(Math.trunc(music.duration * 1000));
-            console.log(dur);
-            console.log(Math.trunc(music.duration * 1000) < dur);
-
             if (!playingMusic && Math.trunc(music.duration * 1000) < dur) // http://www.w3schools.com/tags/av_prop_ended.asp zamiast playing music i może wyjebać tego boola
             //może mieć wyjebane i użyć http://www.w3schools.com/tags/av_prop_loop.asp i wtedy sprawdzać czy długość z aktualnym pozostałym czasem -  wyłączyć loopa
                 music.play();
@@ -277,7 +276,23 @@ function stoned(byWhat, duration) {
         }
     }
     if (!currentlyWorking) {
+        var maskOpacity = 1;
         currentlyWorking = true;
+        ID("stats").className = "stonedText";
+        music.volume = 0;
+        intervalFadeInVolume = setInterval(function() {
+            music.volume += 0.1;
+            if(music.volume >= musicVolume/100){
+                clearInterval(intervalFadeInVolume);
+            }
+        }, 300);
+        intervalFadeInMask = setInterval(function() {
+            maskOpacity -= 0.1;
+            mask.style.opacity = maskOpacity;
+            if(maskOpacity <= 0){
+                clearInterval(intervalFadeInMask);
+            }
+        }, 100);
         intervalElements = setInterval(function() {
             moveObject(1000, 5, byWhat, ID("stoned"));
         }, 1000);
@@ -285,12 +300,32 @@ function stoned(byWhat, duration) {
             rainbow();
         }, 200);
     }
-    if (duration == 0 || duration <= 0) {
+    if(duration == 1000){
+        maskOpacity = 0;
+        intervalFadeOutMask = setInterval(function() {
+            maskOpacity += 0.1;
+            mask.style.opacity = maskOpacity;
+            if(maskOpacity >= 1){
+                clearInterval(intervalFadeOutMask);
+            }
+        }, 100);
+
+        music.volume = musicVolume/100;
+        intervalFadeOutVolume = setInterval(function() {
+            if(music.volume < 0.1){
+                clearInterval(intervalFadeOutVolume);
+                music.volume = 0;
+            }
+            else music.volume -= 0.1;
+        }, 100);
+    }
+    if (duration <= 0) {
         highAmount
         currentlyWorking = false;
         playingMusic = false;
         clearInterval(intervalRainbow);
         clearInterval(intervalElements);
+        ID("stats").className = "";
         ID("body").style.backgroundImage = "none";
     } else
         setTimeout(function() { stoned(byWhat, duration - 100); }, 100);
@@ -303,7 +338,7 @@ function moveObject(duration, amount, what, parent) {
     amount = amount || 1;
     for (i = 0; i < amount; i++) {
         if(!outOfWindow){
-        arrayOfElements.push(new element(parent, what, colorGenerator(), 50, degreeGenerator(), -50, -280));
+        arrayOfElements.push(new element(parent, what, colorGenerator(), 50, degreeGenerator(), null, 20));
         arrayOfElements[i].elHandle();
     }
 
@@ -319,15 +354,14 @@ function moveObject(duration, amount, what, parent) {
         this.elToMove;
         this.startX = X;
         this.startY = Y;
-        this.endX = eX;
-        this.endY = eY;
+        this.endX = eX || clickPosition.x;
+        this.endY = eY || clickPosition.y;
         this.rotation = rot;
         this.color = col;
         this.distanceX;
         this.distanceY;
         this.stepX;
         this.stepY;
-        this.outOf = window.onblur;
         this.amountOfFrames = amountOfSteps;
         var self = this;
 
@@ -335,31 +369,28 @@ function moveObject(duration, amount, what, parent) {
             var divWidth = this.parentContainer.clientWidth;
             var divHeight = this.parentContainer.clientHeight;
             //choose which to generate first: below 10 start generating x first, above 10 y first
-            var mode = Math.floor(Math.random() * 20);
+            var mode = Math.floor(Math.random() * 20);           
             if (mode < 10) {
-                this.startX = Math.floor(Math.random() * divWidth);
-                if (this.startX <= this.margin || this.startX >= divWidth - this.margin) {
-                    this.startY = Math.floor(Math.random() * divHeight);
-                } else if (this.startX >= this.margin && this.startX <= divWidth - this.margin) {
-                    do {
-                        this.startY = Math.floor(Math.random() * divHeight);
-                    } while (this.startY >= this.margin && this.startY <= divHeight - this.margin);
+                this.startX = Math.floor(Math.random() * (divWidth + 400)) - 200;
+                if(this.startX  <= -this.margin || this.startX >= divWidth+ this.margin){
+                    this.startY = Math.floor(Math.random() * (divHeight + 400)) - 200;
+                }
+                else{
+                    do{
+                        this.startY = Math.floor(Math.random() * (divHeight + 400)) - 200;
+                    }while(this.startY > -this.margin && this.startY < divHeight+this.margin)
                 }
             } else {
-                this.startY = Math.floor(Math.random() * divHeight);
-                if (this.startY <= this.margin || this.startY >= divHeight - this.margin) {
-                    this.startX = Math.floor(Math.random() * divWidth);
-                } else if (this.startY >= this.margin && this.startY <= divHeight - this.margin) {
-                    do {
-                        this.startX = Math.floor(Math.random() * divWidth);
-                    } while (this.startX >= this.margin && this.startX <= divWidth - this.margin);
+                this.startY = Math.floor(Math.random() * (divHeight+400)) - 200;
+                if(this.startY  <= -this.margin || this.startY >= divHeight+ this.margin){
+                    this.startX = Math.floor(Math.random() * (divWidth + 400)) - 200;
+                }
+                else{
+                    do{
+                        this.startX = Math.floor(Math.random() * (divWidth + 400)) - 200;
+                    }while(this.startX > -this.margin && this.startX < divWidth+this.margin)
                 }
             }
-            /*
-            this.endX = divWidth - this.startX;
-            this.endY = divHeight - this.startY;*/
-            this.endX = divWidth / 2;
-            this.endY = divHeight / 2;
         }
         this.imgTranslate = function() {
             var choose = Math.floor(Math.random() * 2);
@@ -601,7 +632,8 @@ function centerClick(){
     var rect = click.getBoundingClientRect();    //Used somewhere else
     clickPosition.x = rect.left;
     clickPosition.y = rect.top;
-    console.log()
+    clickPosition.xMid = rect.left + clickWidth/2;
+    clickPosition.yMid = rect.top + clickHeight/2;
 }
 
 
@@ -629,19 +661,19 @@ function expandMenu(image) {
 
 
 var muted = false;
-
+var musicVolume = 25;
 function mute() {
     muted = !muted;
     changeVolume(ID("volume").value);
 }
-
 function changeVolume(volumeLevel) {
     if (muted) {
         music.volume = 0;
         ID("muteBtn").style.backgroundColor = "#5a5c51";
     } else {
         ID("muteBtn").style.backgroundColor = "#bcd5d1";
-        music.volume = volumeLevel / 100;
+        musicVolume = volumeLevel;
+        music.volume = musicVolume / 100;
     }
 
 }
