@@ -79,6 +79,11 @@ var mainAmount = 0,
     friends = 0;
 var upgradeArray = [];
 
+var clickPosition = {
+    x: 0,
+    y: 0,
+};
+
 var beer = {
         name: 'beer',
         upgradeID: 'addBeer',
@@ -243,13 +248,16 @@ var intervalRainbow;
 function rainbow() {
     ID("body").style.backgroundImage = "radial-gradient(farthest-corner at 50% 250px," + colorGenerator() + ", " + colorGenerator() + ", " + colorGenerator() + ", " + colorGenerator() + ")";
 }
-window.onfocus = function() {
-    var stoned = ID("stoned")
-    if (stoned.childNodes.length > 20)
-        ID("stoned").innerHTML = "";
+var outOfWindow;
+window.onblur = function() {
+    outOfWindow = true;
 };
-var music = new Audio("./snd/narkobaron2.mp3");
+window.onfocus = function() {
+    outOfWindow = false;
 
+};
+//var music = new Audio("./snd/narkobaron2.mp3");
+var music = new Audio("");
 function stoned(byWhat, duration) {
     dur = duration;
     if (!playingMusic) {
@@ -294,8 +302,10 @@ function moveObject(duration, amount, what, parent) {
     var arrayOfElements = [];
     amount = amount || 1;
     for (i = 0; i < amount; i++) {
+        if(!outOfWindow){
         arrayOfElements.push(new element(parent, what, colorGenerator(), 50, degreeGenerator(), -50, -280));
         arrayOfElements[i].elHandle();
+    }
 
     }
 
@@ -439,6 +449,7 @@ function moveObject(duration, amount, what, parent) {
             this.amountOfFrames--;
             if (this.distanceX <= 0 && this.distanceY <= 0) {
                 clearInterval(this.timer);
+                //TO DO control exception when out of focus
                 this.parentContainer.removeChild(this.elToMove);
             }
         }
@@ -448,6 +459,7 @@ function moveObject(duration, amount, what, parent) {
 }
 
 function init(){
+    centerClick();
     upgradeArray.push(beer);
     upgradeArray.push(salvia );
     upgradeArray.push(acodin);
@@ -457,6 +469,7 @@ function init(){
     upgradeArray.push(molly);
     upgradeArray.push(powder);
     upgradeArray.push(syringe);
+    //TO DO ADD resize func
     main();
 }
 
@@ -556,8 +569,10 @@ function calculateGain() {
 }
 
 
-function clickMainDown() {
+function mainClickDown() {
+
     ID("mainClick").style.height = "145px";
+    centerClick();
     mainAmount++;
     clicks++;
     ID("clicks").innerHTML = clicks;
@@ -566,9 +581,30 @@ function clickMainDown() {
 
 }
 
-function clickMainUp() {
+function mainClickUp() {
     ID("mainClick").style.height = "150px";
+    centerClick();
 }
+
+function centerClick(){
+
+    middleWidth = ID("middle").clientWidth;
+    middleHeight = ID("middle").clientHeight;
+    click = ID("mainClick");
+    clickWidth = click.clientWidth;
+    clickHeight = click.clientHeight;
+    var left = middleWidth/2 - clickWidth/2;
+    var top = middleHeight/2 - clickHeight/2;
+    click.style.left = left + "px";
+    click.style.top = top + "px";
+
+    var rect = click.getBoundingClientRect();    //Used somewhere else
+    clickPosition.x = rect.left;
+    clickPosition.y = rect.top;
+    console.log()
+}
+
+
 
 function degreeGenerator() {
     var random = Math.floor(Math.random() * 180);

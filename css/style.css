@@ -60,7 +60,7 @@ ul#upgrades>li:hover {
 #left{
 	height: 500px;
 	float:left;
-	min-width: 220px; 
+	width: 220px; 
 }
 #stats {
     position: absolute;s
@@ -98,17 +98,13 @@ ul#upgrades>li:hover {
 
 #middle {
     height: 500px;
-    width: calc(100% - 420px);
+    width: calc(100% - 200px - 220px);
     float:left;
 }
-#mainClickDiv{
-	position: relative;
-	left: calc(50% - 107px);
-	top: 50%;
-}
 #mainClick {
-    filter: grayscale(100%);
     height: 150px;
+    position: relative;
+    filter: grayscale(100%);
     transition: filter 0.1s
 }
 
@@ -139,7 +135,7 @@ ul#upgrades>li{
 #misc{
 	position: fixed;
 	transition: margin 2s;
-    background-color: rgba(29, 33, 32, 0.6);
+  background-color: rgba(29, 33, 32, 0.6);
 	right: 0;
 	bottom: 0;
 	margin: 0;
